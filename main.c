@@ -5,7 +5,6 @@
 #include <time.h>
 #include "projekt.h"
 
-
 int main () {
     int a = 0;
     printf("Hello! I'm your program. Ready to help you with your schedule!\n");
