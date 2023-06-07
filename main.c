@@ -8,8 +8,145 @@
 int main () {
     int a = 0;
     printf("Hello! I'm your program. Ready to help you with your schedule!\n");
-
     printDateTimeAndDayOfWeek();
+    while (a != 1) {
+    printf("\nWhat day do you want to fill in? Enter the word 'Finish' to see other features\nSunday\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nFinish");
+    char str1[255];
+    char text[100];
+    scanf("%s", str1);
+    if(strcmp(str1, "Finish") == 0) {
+        break;
+        system("cls"); 
+
+    }
+    FILE* fp;
+    fp = fopen(str1, "w");
+    if(strcmp(str1, "Sunday") == 0) { if ((fp = fopen("Sunday.txt", "w")) == NULL) {
+        printf("Cannot open file/file not exist\n");
+        return 1; 
+    }
+    system("cls");
+    printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+    while (1) {
+        scanf("%s", text);
+        if (strcmp(text, "Finish") == 0) {
+            break;
+            system("cls");
+        }
+        fprintf(fp, "%s\n", text);
+    }
+    fclose(fp);
+    printf("Text saved successfully in the file.\n");
+    } else {
+        if(strcmp(str1, "Monday") == 0) { if ((fp = fopen("Monday.txt", "w")) == NULL) {
+            printf("Cannot open file/file not exist\n");
+            return 1;            
+        }
+        system("cls");
+        printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+        while (1) {
+            scanf("%s", text);
+            if (strcmp(text, "Finish") == 0) {
+                break;
+                system("cls");
+            }
+            fprintf(fp, "%s\n", text);
+        }
+        fclose(fp);
+        printf("Text saved successfully in the file.\n");
+        } else {
+            if(strcmp(str1, "Tuesday") == 0) { if ((fp = fopen("Tuesday.txt", "w")) == NULL) {
+                printf("Cannot open file/file not exist\n");
+                return 1;
+            }
+            system("cls");
+            printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+            while (1) {
+                scanf("%s", text);
+                if (strcmp(text, "Finish") == 0) {
+                    break;
+                    system("cls");
+                }
+                fprintf(fp, "%s\n", text);
+            }
+            fclose(fp);
+            printf("Text saved successfully in the file.\n");
+            } else {
+                if(strcmp(str1, "Wednesday") == 0) { if ((fp = fopen("Wednesday.txt", "w")) == NULL) {
+                    printf("Cannot open file/file not exist\n");
+                    return 1; 
+                }
+                system("cls");
+                printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+                while (1) {
+                    scanf("%s", text);
+                    if (strcmp(text, "Finish") == 0) {
+                        break;
+                        system("cls");
+                    }
+                    fprintf(fp, "%s\n", text);
+                }
+                fclose(fp);
+                printf("Text saved successfully in the file.\n");
+                } else {
+                    if(strcmp(str1, "Thursday") == 0) { if ((fp = fopen("Thursday.txt", "w")) == NULL) {
+                        printf("Cannot open file/file not exist\n");
+                        return 1; 
+                    }
+                    system("cls");
+                    printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+                    while (1) {
+                        scanf("%s", text);
+                        if (strcmp(text, "Finish") == 0) {
+                            break;
+                            system("cls");
+                        }
+                        fprintf(fp, "%s\n", text);
+                    }
+                    fclose(fp);
+                    printf("Text saved successfully in the file.\n");
+                    } else {
+                        if(strcmp(str1, "Friday") == 0) { if ((fp = fopen("Friday.txt", "w")) == NULL) {
+                            printf("Cannot open file/file not exist\n");
+                            return 1; 
+                        }
+                        system("cls");
+                        printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+                        while (1) {
+                            scanf("%s", text);
+                            if (strcmp(text, "Finish") == 0) {
+                                break;
+                                system("cls");
+                            }
+                            fprintf(fp, "%s\n", text);
+                        }
+                        fclose(fp);
+                        printf("Text saved successfully in the file.\n");
+                        } else {
+                            if(strcmp(str1, "Saturday") == 0) { if ((fp = fopen("Saturday.txt", "w")) == NULL) {
+                                printf("Cannot open file/file not exist\n");
+                                return 1; 
+                            }
+                            system("cls");
+                            printf("Select the text for the schedule (enter 'Finish' to stop):\nRise early\nMake my bed\nBreakfast time\nLunch time\nDinner time\nCall my friends\nGetting ready for bed\n");
+                            while (1) {
+                                scanf("%s", text);
+                                if (strcmp(text, "Finish") == 0) {
+                                    break;
+                                    system("cls");
+                                }
+                                fprintf(fp, "%s\n", text);
+                            }
+                            fclose(fp);
+                            printf("Text saved successfully in the file.\n");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    }
     while (a != 1) {
     printf("\nPlease choose your option:\nSunday\nMonday\nTuesday\nWednesday\nThursday\nFriday\nSaturday\nFinish");
     char str[255];
