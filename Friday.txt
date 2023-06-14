@@ -1,11 +1,5 @@
-Rise early
-Make my bed
-Get some exercise
-Walk in the fresh air
-Call my friends
-Meet a friend
-Dine at the restaurant
-Return home
-Watch the film
-Getting ready for bed
-Sleep
+Rise_early
+Breakfast_time
+Call_my_friends
+Getting_ready_for_bed
+Call_my_friends

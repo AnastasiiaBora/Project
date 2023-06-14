@@ -1,12 +1,4 @@
-Rise early
-Make my bed
-Get some exercise
-Breakfast time
-Get some exercise
-Outdoot time
-Occupation 
-Call my friends
-Dinner time
-Occupation 
-Getting ready for bed
-Sleep
+Breakfast_time
+Lunch_time
+Call_my_friends
+Getting_ready_for_bed

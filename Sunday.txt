@@ -1,7 +1,4 @@
-Rise
-early
-Make
-my
-bed
-Lunch
-time
+Rise_early
+Make_my_bed
+Dinner_time
+Getting_ready_for_bed

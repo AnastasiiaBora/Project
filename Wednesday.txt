@@ -1,10 +1,5 @@
-Wake up
-Make my bed
-Breakfast time
-Outdoot time
-Acaddemic time
-Call my friends
-Dinner time
-Occupation 
-Getting ready for bed
-Sleep
+Rise_early
+Call_my_friends
+Lunch_time
+Call_my_friends
+Getting_ready_for_bed
