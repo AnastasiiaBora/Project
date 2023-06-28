@@ -1,19 +1,23 @@
 #include <stdio.h> 
-#include <conio.h> 
-#include <stdlib.h> 
-#include <string.h>
-#include <time.h>
 #include <math.h>
+
+unsigned long sum_squared(const int line) {
+ unsigned long sum;
+ for (int i = 0; i <= line; i ++) {
+        sum = pow(2, i);
+    }
+  return sum;
+}
 
 int main() 
 {
-    int sum_squared;
     int line;
-    printf("Enter the line:");
-    scanf("%d", &line);
 
-    printf("prints: %d", (int)pow(2, line));
+    unsigned long a = sum_squared(line);
     
-    getch();
-}
+    printf("%lu\n", sum_squared(1)); 
+    printf("%lu\n", sum_squared(4)); 
 
+    
+   return 0;
+}

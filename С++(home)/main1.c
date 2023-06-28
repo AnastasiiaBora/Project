@@ -1,25 +1,21 @@
-#include <stdio.h> 
-#include <conio.h> 
-#include <stdlib.h> 
-#include <string.h>
-#include <time.h>
+#include <stdio.h>
 
-int main() 
-{
-    int opposite_number;
-    int n, a;
-    printf("Enter the number of numbers in a circle:");
-    scanf("%d", &n);
-    int number;
-    printf("Enter the number:");
-    scanf("%d", &number);
-    a = ((360 / n) * number);
-    if (a > 180){
-        opposite_number = (a - 180) / (360 / n);
+int opposite_number(const int n, const int number) {
+    int opposite_num;
+    int a = (360 / n) * number;
+    
+    if (a > 180) {
+        opposite_num = (a - 180) / (360 / n);
     } else {
-         opposite_number = (a + 180) / (360 / n);
+        opposite_num = (a + 180) / (360 / n);
     }
     
-    printf("prints: %d", opposite_number);
-    getch();
+    return opposite_num;
+}
+
+int main() {
+    printf("%d\n", opposite_number(10, 2));
+    printf("%d\n", opposite_number(12, 9));
+
+    return 0;
 }
