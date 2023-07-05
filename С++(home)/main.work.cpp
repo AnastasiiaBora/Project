@@ -31,22 +31,6 @@ public:
         this->calculateMoney();
     }
     
-     void compare (Money money2) {
-        if (this->usd > money2.usd && this->penny > money2.penny) {
-            std::cout << this->usd<< std::endl;
-        } else {
-            std::cout << money2.usd<< std::endl;
-        } 
-    }
-
-    void subtract (Money money2)
-    {
-        this->usd = this->usd - money2.usd;
-        this->penny = this->penny - money2.penny;
-        this->calculateMoney();
-    }
-   
- 
     void calculateMoney ()
     {
         if (this->penny >= 100) {
@@ -61,6 +45,30 @@ public:
             }
         }
     }
+
+    void compare(Money money2) 
+    {
+        if(this->usd > money2.usd) {
+            std::cout << this->usd << ',' << this->penny << std::endl;
+        } else {
+            if(this->usd < money2.usd) {
+                std::cout << money2.usd << ',' << money2.penny << std::endl;
+            } else {
+                    if(this->penny > money2.penny) {
+                        std::cout << this->usd << ',' << this->penny << std::endl;
+                    } else {
+                         std::cout << money2.usd << ',' << money2.penny << std::endl;
+                        }
+                }
+         }
+    };
+
+    void subtract (Money money2)
+    {
+        this->usd = this->usd - money2.usd;
+        this->penny = this->penny - money2.penny;
+        this->calculateMoney();
+    }
  
     void print ()
     {
@@ -70,15 +78,13 @@ public:
  
 int main() {
     try {
-        Money money1((long)1, 50);
+        Money money1((long)0, 89);
         money1.print();
  
-        Money money2((long)1, 99);
+        Money money2((long)0, 99);
         money2.print();
  
-        money1.subtract(money2);
-        std::cout << "Result: " << std::endl;
-        money1.print();
+        money1.compare(money2);
  
  
     } catch (std::string exception) {
