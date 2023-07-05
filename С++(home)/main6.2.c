@@ -8,15 +8,6 @@ void encode_char(const char character, bool bits[8]) {
     }
 }
 
-void encode_string(const char* string, bool bytes[][8]) {
-    int len = strlen(string);
-    for (int i = 0; i < len; i++) {
-        encode_char(string[i], bytes[i]);
-    }
-    // Set the terminator byte
-    encode_char('\0', bytes[len]);
-}
-
 char decode_byte(const bool bits[8]) {
     char character = 0;
     for (int i = 0; i < 8; i++) {
@@ -25,13 +16,22 @@ char decode_byte(const bool bits[8]) {
     return character;
 }
 
+void encode_string(const char* string, bool bytes[][8]) {
+    int len = strlen(string);
+    for (int i = 0; i < len; i++) {
+        encode_char(string[i], bytes[i]);
+    }
+    encode_char('\0', bytes[len]);
+}
+
 void decode_bytes(const int rows, const bool bytes[][8], char* string) {
     for (int i = 0; i < rows; i++) {
         string[i] = decode_byte(bytes[i]);
     }
-    // Add the terminator character
     string[rows] = '\0';
 }
+
+
 
 int main() {
     const char* text = "Hello, how are you?";
