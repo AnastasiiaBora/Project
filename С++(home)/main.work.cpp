@@ -3,8 +3,8 @@
 class Money
 {
 public:
-    long usd; // here
-    int penny; // here
+    long usd; 
+    int penny; 
  
     Money(long usd, int penny)
     {
