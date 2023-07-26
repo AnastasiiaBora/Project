@@ -108,7 +108,7 @@ void initialize_input_files_with_sprintf(const char **input_files, const char **
     };
 
     for (int k = 0; k < 100; k++) {
-        char buffer[50];
+        char buffer[150];
         sprintf(buffer, "samples/parking_logs_%02d.csv", k + 1);
         input_files[k] = strdup(buffer);
     }
@@ -345,14 +345,50 @@ fclose(fp);
 return array_txt;
 }
 
-void calculate_parking_time(int start_h, int start_m, int end_h, int end_m) {
+int calculate_parking_time(int start_h, int start_m, int end_h, int end_m) {
     int time_in_minutes = (60 - start_m) + (((end_h - start_h) - 1) * 60) + end_m;
-    printf("Duration of parking: %d", time_in_minutes);
+    printf("Duration of parking: %d\n", time_in_minutes);
+    return time_in_minutes;
 }
 
-// void get_parking_fee(int time_in_minutes, float prices) {
-//  result_txt_array->tariff = prices;
-// }
+void get_parking_fee(int time_in_minutes, struct parking_pricess_array_items *prices) {
+ int hours_for_payment;
+ int minutes_for_payment;
+ int  result_prise_minuts;
+ int result_prise_hours = 0;
+ hours_for_payment = time_in_minutes / 60;
+ minutes_for_payment = time_in_minutes - (hours_for_payment * 60);
+
+ if(hours_for_payment == 0 && minutes_for_payment <= 15) {
+        result_prise_minuts = 0;
+ } else {
+    if(hours_for_payment == 0 && minutes_for_payment > 15 && minutes_for_payment <= 30) {
+        strcpy(prices->time_limit, "30m");
+        result_prise_minuts = prices->tariff;
+     } else{
+        if(hours_for_payment == 0 && minutes_for_payment > 30 && minutes_for_payment < 60) {
+            strcpy(prices->time_limit, "1h");
+            result_prise_minuts = prices->tariff;
+        } else {
+              if(hours_for_payment >= 1 && hours_for_payment <= 3) {
+                strcpy(prices->time_limit, "3h");
+                result_prise_hours = (hours_for_payment * prices->tariff) + result_prise_minuts;  
+            } else {
+                if(hours_for_payment > 3 && hours_for_payment <= 6) {
+                    strcpy(prices->time_limit, "6h");
+                    result_prise_hours = (hours_for_payment * prices->tariff) + result_prise_minuts;  
+                } else {
+                   if(hours_for_payment > 6 && hours_for_payment <= 24) {
+                        strcpy(prices->time_limit, "1d");
+                        result_prise_hours = (hours_for_payment * prices->tariff) + result_prise_minuts;  
+                    } 
+                }
+            }
+        }
+    }
+  }
+  printf("%d", result_prise_hours);
+}
 
 int main() {
     const char *input_files[6000];
@@ -378,11 +414,13 @@ int main() {
     struct parking_pricess_array_items *records_txt_array = load_prices("prices.txt");
     struct parking_pricess_array_items *result_txt_array = records_txt_array;
     while (result_txt_array != NULL) {
-        printf("time_limit: %s, tariff: %.2f\n", result_txt_array->time_limit, result_txt_array->tariff);
+       printf("time_limit: %s, tariff: %.2f\n", result_txt_array->time_limit, result_txt_array->tariff);
         result_txt_array = result_txt_array->next_array_parking_pricess;
     }
 
-    calculate_parking_time(8, 35, 20, 23);
+    int time_in_minutes = calculate_parking_time(8, 35, 20, 23);
+
+    get_parking_fee(time_in_minutes, records_txt_array);
     
     return 0;
 }
