@@ -219,8 +219,7 @@ void initialize_input_files_with_sprintf(const char **input_files, const char **
         sprintf(buffer, "samples/prices_%02d.txt", i + 1);
         input_txt_files[i] = strdup(buffer);
     }
-}
-
+} 
 void csv_files(const char *output_file_path, int number_of_files, const char **input_file_paths){
     FILE* output_file = fopen(output_file_path, "w");
 
@@ -345,54 +344,93 @@ fclose(fp);
 return array_txt;
 }
 
-int calculate_parking_time(int start_h, int start_m, int end_h, int end_m) {
-    int time_in_minutes = (60 - start_m) + (((end_h - start_h) - 1) * 60) + end_m;
-    printf("Duration of parking: %d\n", time_in_minutes);
+int calculate_parking_time(struct parking_records_array_items *records_array) {
+    int time_in_minutes = (60 - records_array->start_m) + (((records_array->end_h - records_array->start_h) - 1) * 60) + records_array->end_m;
     return time_in_minutes;
 }
-
-void get_parking_fee(int time_in_minutes, struct parking_pricess_array_items *prices) {
- int hours_for_payment;
- int minutes_for_payment;
- int  result_prise_minuts;
- int result_prise_hours = 0;
- hours_for_payment = time_in_minutes / 60;
- minutes_for_payment = time_in_minutes - (hours_for_payment * 60);
-
- if(hours_for_payment == 0 && minutes_for_payment <= 15) {
-        result_prise_minuts = 0;
- } else {
-    if(hours_for_payment == 0 && minutes_for_payment > 15 && minutes_for_payment <= 30) {
-        strcpy(prices->time_limit, "30m");
-        result_prise_minuts = prices->tariff;
-     } else{
-        if(hours_for_payment == 0 && minutes_for_payment > 30 && minutes_for_payment < 60) {
-            strcpy(prices->time_limit, "1h");
-            result_prise_minuts = prices->tariff;
-        } else {
-              if(hours_for_payment >= 1 && hours_for_payment <= 3) {
-                strcpy(prices->time_limit, "3h");
-                result_prise_hours = (hours_for_payment * prices->tariff) + result_prise_minuts;  
-            } else {
-                if(hours_for_payment > 3 && hours_for_payment <= 6) {
-                    strcpy(prices->time_limit, "6h");
-                    result_prise_hours = (hours_for_payment * prices->tariff) + result_prise_minuts;  
-                } else {
-                   if(hours_for_payment > 6 && hours_for_payment <= 24) {
-                        strcpy(prices->time_limit, "1d");
-                        result_prise_hours = (hours_for_payment * prices->tariff) + result_prise_minuts;  
-                    } 
-                }
-            }
+float find_tariff_by_time_limit(const char *time_limit, struct parking_pricess_array_items *prices) {
+    struct parking_pricess_array_items *current_prices = prices;
+    while (current_prices != NULL) {
+        if (strcmp(current_prices->time_limit, time_limit) == 0) {
+            return current_prices->tariff;
         }
+        current_prices = current_prices->next_array_parking_pricess;
     }
-  }
-  printf("%d", result_prise_hours);
+    return 0;
+}
+
+float get_parking_fee(int time_in_minutes, struct parking_pricess_array_items *prices) {
+ float result_prise = 0;
+ float result_prise_1 = 0;
+int hours_for_payment;
+if(time_in_minutes < 15) {
+    result_prise = 0;
+    } else if (time_in_minutes >= 15 && time_in_minutes < 30) {
+            result_prise = find_tariff_by_time_limit("30m", prices);
+        } else if (time_in_minutes >= 30 && time_in_minutes < 60){
+            result_prise = find_tariff_by_time_limit("1h", prices);
+            } else if (time_in_minutes >= 60) {
+                hours_for_payment = time_in_minutes / 60;
+                if(time_in_minutes % 60 == 0) {
+                    result_prise = find_tariff_by_time_limit("h+", prices) * hours_for_payment;
+                } else {
+                        result_prise = (find_tariff_by_time_limit("h+", prices) * hours_for_payment) + find_tariff_by_time_limit("1h", prices);
+                    }
+              }
+if(time_in_minutes>= 60 && time_in_minutes < 180) {
+    result_prise_1 = find_tariff_by_time_limit("3h", prices);
+    } else if (time_in_minutes >= 180 && time_in_minutes < 360) {
+        result_prise_1 = find_tariff_by_time_limit("6h", prices);
+         } else if(time_in_minutes >= 360 && time_in_minutes < 1440) {
+            result_prise_1 = find_tariff_by_time_limit("1d", prices);
+         }
+    printf("Duration of parking: %d\n", time_in_minutes);
+    if(result_prise < result_prise_1) {
+        printf("Result prise: %.2f\n", result_prise);
+    } else {
+        printf("Result prise: %.2f\n", result_prise_1);
+    }
+    if(result_prise < result_prise_1) {
+    return result_prise;
+} else {
+   return result_prise_1;
+}
+}
+
+float calculate_average_parking_fee(struct parking_records_array_items *records, struct parking_pricess_array_items *prices) {
+float average_parking = 0;
+int number = 0;
+int time_in_minutes = 0;
+struct parking_records_array_items *current_record = records;
+while (current_record != NULL) {
+    time_in_minutes = calculate_parking_time(current_record);
+    float parking_fee = get_parking_fee(time_in_minutes, prices);
+    average_parking += parking_fee;
+    number ++;
+    current_record = current_record->next_array_records;
+}
+printf("Average parking fee: %.2f\n", average_parking / number);
+return average_parking / number;
+}
+
+float calculate_average_parking_time(struct parking_records_array_items *records) {
+float average_parking_long = 0;
+int parking_long_number = 0;
+int time_in_minutes = 0;
+struct parking_records_array_items *current_record = records;
+while (current_record != NULL) {
+    time_in_minutes = calculate_parking_time(current_record);
+    average_parking_long += time_in_minutes;
+    parking_long_number++;
+    current_record = current_record->next_array_records;
+}
+printf("Average parking time: %.2f\n", average_parking_long / parking_long_number);
+return average_parking_long / parking_long_number;
 }
 
 int main() {
-    const char *input_files[6000];
-    const char *input_txt_files[6000];
+    const char *input_files[100];
+    const char *input_txt_files[100];
 
     initialize_input_files_with_sprintf(input_files, input_txt_files);
     
@@ -407,20 +445,32 @@ int main() {
     struct parking_records_array_items *records_array = load_parking_records("parking_logs.csv");
     struct parking_records_array_items *result = records_array;
     while (result != NULL) {
-        printf("license_plate: %s, start_h: %d, start_m: %d, end_h:%d, end_m:%d\n", result->license_plate, result->start_h, result->start_m, result->end_h, result->end_m);
+      // printf("license_plate: %s, start_h: %d, start_m: %d, end_h:%d, end_m:%d\n", result->license_plate, result->start_h, result->start_m, result->end_h, result->end_m);
         result = result->next_array_records;
     }
 
     struct parking_pricess_array_items *records_txt_array = load_prices("prices.txt");
     struct parking_pricess_array_items *result_txt_array = records_txt_array;
     while (result_txt_array != NULL) {
-       printf("time_limit: %s, tariff: %.2f\n", result_txt_array->time_limit, result_txt_array->tariff);
+      // printf("time_limit: %s, tariff: %.2f\n", result_txt_array->time_limit, result_txt_array->tariff);
         result_txt_array = result_txt_array->next_array_parking_pricess;
     }
-
-    int time_in_minutes = calculate_parking_time(8, 35, 20, 23);
-
-    get_parking_fee(time_in_minutes, records_txt_array);
-    
+    struct parking_pricess_array_items *prices = load_prices("prices.txt");
+        for (int i = 0; i < number_of_files; i++) {
+        const char *output_file = input_files[i];
+        struct parking_records_array_items *records_array = load_parking_records(input_files[i]);
+        if (records_array != NULL) {
+            printf("Parking Logs: %s\n", output_file);
+            struct parking_records_array_items *current_record = records_array;
+            while (current_record != NULL) {
+                int time_in_minutes = calculate_parking_time(current_record);
+                get_parking_fee(time_in_minutes, prices);
+                current_record = current_record->next_array_records;
+            }
+            printf("\n");
+        }
+    }
+    float average_parking_fee = calculate_average_parking_fee(records_array, prices);
+    float average_parking_time = calculate_average_parking_time(records_array);
     return 0;
 }
