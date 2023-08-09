@@ -359,56 +359,65 @@ float find_tariff_by_time_limit(const char *time_limit, struct parking_pricess_a
     return 0;
 }
 
-float get_parking_fee(int time_in_minutes, struct parking_pricess_array_items *prices) {
+float get_parking_fee(int time_in_minutes, struct parking_pricess_array_items *prices, int file_number) {
  float result_prise = 0;
  float result_prise_1 = 0;
+ int flag = 0;
 int hours_for_payment;
-if(time_in_minutes < 15) {
-    result_prise = 0;
+    if(time_in_minutes < 15) {
+        result_prise = 0;
     } else if (time_in_minutes >= 15 && time_in_minutes < 30) {
             result_prise = find_tariff_by_time_limit("30m", prices);
         } else if (time_in_minutes >= 30 && time_in_minutes < 60){
             result_prise = find_tariff_by_time_limit("1h", prices);
             } else if (time_in_minutes >= 60) {
                 hours_for_payment = time_in_minutes / 60;
-                if(time_in_minutes % 60 == 0) {
+             if(time_in_minutes % 60 == 0) {
                     result_prise = find_tariff_by_time_limit("h+", prices) * hours_for_payment;
-                } else {
-                        result_prise = (find_tariff_by_time_limit("h+", prices) * hours_for_payment) + find_tariff_by_time_limit("1h", prices);
-                    }
-              }
-if(time_in_minutes>= 60 && time_in_minutes < 180) {
-    result_prise_1 = find_tariff_by_time_limit("3h", prices);
+            } else {
+            result_prise = (find_tariff_by_time_limit("h+", prices) * hours_for_payment) + find_tariff_by_time_limit("1h", prices);
+        }
+    }
+    if(time_in_minutes>= 60 && time_in_minutes < 180) {
+        result_prise_1 = find_tariff_by_time_limit("3h", prices);
+        flag = 1;
     } else if (time_in_minutes >= 180 && time_in_minutes < 360) {
         result_prise_1 = find_tariff_by_time_limit("6h", prices);
-         } else if(time_in_minutes >= 360 && time_in_minutes < 1440) {
-            result_prise_1 = find_tariff_by_time_limit("1d", prices);
-         }
-    printf("Duration of parking: %d\n", time_in_minutes);
-    if(result_prise < result_prise_1) {
-        printf("Result prise: %.2f\n", result_prise);
-    } else {
-        printf("Result prise: %.2f\n", result_prise_1);
+        flag = 1;
+        } else if(time_in_minutes >= 360 && time_in_minutes < 1440) {
+        result_prise_1 = find_tariff_by_time_limit("1d", prices);
+        flag = 1;
     }
-    if(result_prise < result_prise_1) {
-    return result_prise;
+    printf("Duration of parking: %d\n", time_in_minutes);
+    if(result_prise_1 < result_prise && flag == 1) {
+        printf("Result prise: %.2f\n", result_prise_1);
+    } else {
+        printf("Result prise: %.2f\n", result_prise);
+    }
+    if(result_prise_1 < result_prise && flag == 1) {
+    return result_prise_1;
 } else {
-   return result_prise_1;
+   return result_prise;
 }
 }
 
 float calculate_average_parking_fee(struct parking_records_array_items *records, struct parking_pricess_array_items *prices) {
+ const char *input_files[100];
+     int number_of_files = 100;
 float average_parking = 0;
 int number = 0;
 int time_in_minutes = 0;
 struct parking_records_array_items *current_record = records;
+ for (int i = 0; i < number_of_files; i++) {
+        const char *output_file = input_files[i];
 while (current_record != NULL) {
     time_in_minutes = calculate_parking_time(current_record);
-    float parking_fee = get_parking_fee(time_in_minutes, prices);
+    float parking_fee = get_parking_fee(time_in_minutes, prices, i + 1);
     average_parking += parking_fee;
     number ++;
     current_record = current_record->next_array_records;
 }
+ }
 printf("Average parking fee: %.2f\n", average_parking / number);
 return average_parking / number;
 }
@@ -426,6 +435,153 @@ while (current_record != NULL) {
 }
 printf("Average parking time: %.2f\n", average_parking_long / parking_long_number);
 return average_parking_long / parking_long_number;
+}
+
+float calculate_average_stays(struct parking_records_array_items *records) {
+int number_of_files = 100;
+int average_stays_number = 0;
+char duplicate[225] = "";
+char check[225] = "";
+struct parking_records_array_items *current_record = records;
+
+while(current_record != NULL){
+    int is_duplicate = 0;
+    if(strcmp(current_record->license_plate, duplicate) != 0) {
+        strcpy(check, current_record->license_plate);
+    struct parking_records_array_items *next_record = records;
+        while(next_record != NULL){
+            if(next_record != current_record && strcmp(next_record->license_plate, check) == 0) {
+                is_duplicate = 1;
+                break;
+            }
+            next_record = next_record->next_array_records;
+        }
+        if(is_duplicate == 0) {
+            strcpy(duplicate, current_record->license_plate);
+            average_stays_number++;
+        }
+    }
+    current_record = current_record->next_array_records;
+}
+printf("Average stays: %.2f\n", (float)average_stays_number / number_of_files);
+return (float)average_stays_number / number_of_files;
+}
+
+int get_most_common_region(struct parking_records_array_items *records, const char **input_files) {
+
+int number_of_files = 100;
+int max_count = 0;
+int most_index = -1;
+
+    for (int i = 0; i < number_of_files; i++) {
+        const char *output_file = input_files[i];
+        FILE* fp = fopen(output_file, "r");
+
+        if (fp == NULL) {
+            printf("Cannot open file/file not exist: %s\n", output_file);
+            continue;
+        }
+        int count = 0;
+        char line[1000];
+
+        while(fgets(line, sizeof(line), fp) != NULL){
+            count++;
+        }
+        fclose(fp);
+
+        if(count > max_count) {
+            max_count = count;
+            most_index = i + 1;
+        }
+    }
+    if(most_index != -1) {
+        printf("Parking from which cars enter most often: %02d\n", most_index);
+    }
+return most_index;
+}
+
+int get_busiest_hour (struct parking_records_array_items *records) {
+int count[24] = {0};
+char line[1000];
+const char *output_file = "parking_logs.csv";   
+        
+    FILE* fp = fopen(output_file, "r");
+
+    if (fp == NULL) {
+        printf("Cannot open file/file not exist\n");
+    }
+
+    while(fgets(line, sizeof(line), fp) != NULL){
+        struct parking_records_array_items new_parking_records;
+
+        int result = sscanf(line, "%[^,],%d,%d,%d,%d", new_parking_records.license_plate, &new_parking_records.start_h, &new_parking_records.start_m, &new_parking_records.end_h, &new_parking_records.end_m);
+        count[new_parking_records.start_h]++;
+    }
+        fclose(fp);
+
+        int max_count = 0;
+        int most_index = 0;
+
+        for(int hour = 6; hour <= 19; hour++) {
+            if(count[hour] > max_count) {
+                max_count = count[hour];
+                most_index = hour;
+            }
+        }
+
+printf("The hour when the parking lot is busiest: %d\n", most_index);
+return most_index;
+}
+
+int get_max_number_of_cars(struct parking_records_array_items *records, const char **input_files) { 
+int number_of_files = 100;
+int max_count_total = 0;
+int most_index_total = -1;
+int car_count[24] = {0};
+int most_index = -1;
+
+    for (int i = 0; i < number_of_files; i++) {
+        const char *output_file = input_files[i];
+        FILE* fp = fopen(output_file, "r");
+
+        if (fp == NULL) {
+            printf("Cannot open file/file not exist: %s\n", output_file);
+            continue;
+        }
+        int count[24] = {0};
+        char line[1000];
+
+        int max_count = 0;
+
+        while(fgets(line, sizeof(line), fp) != NULL){
+            struct parking_records_array_items new_parking_records;
+
+            int result = sscanf(line, "%[^,],%d,%d,%d,%d", new_parking_records.license_plate, &new_parking_records.start_h, &new_parking_records.start_m, &new_parking_records.end_h, &new_parking_records.end_m);
+                count[new_parking_records.start_h]++;
+                    
+            for(int hour = 6; hour <= 19; hour++) {
+                if(count[new_parking_records.start_h] > max_count){
+                    max_count = count[new_parking_records.start_h];
+                    most_index = new_parking_records.start_h;
+                }
+            }
+        }
+        fclose(fp);
+        printf("\nThe highest number of cars in Parking logs %02d: %d cars in %d hours\n", i + 1, max_count, most_index);                
+        if(most_index != 1) {
+            fp = fopen(output_file, "r");
+            char line1[1000];
+            while(fgets(line1, sizeof(line1), fp) != NULL){
+                struct parking_records_array_items new_parking_records;
+                int result = sscanf(line1, "%[^,],%d,%d,%d,%d", new_parking_records.license_plate, &new_parking_records.start_h, &new_parking_records.start_m, &new_parking_records.end_h, &new_parking_records.end_m);
+                if(new_parking_records.start_h == most_index) {
+                     printf("license_plate: %s, start_h: %d, start_m: %d\n", new_parking_records.license_plate, new_parking_records.start_h, new_parking_records.start_m);
+                }
+            }
+            fclose(fp);
+        }
+    }
+    return most_index;
 }
 
 int main() {
@@ -456,15 +612,17 @@ int main() {
         result_txt_array = result_txt_array->next_array_parking_pricess;
     }
     struct parking_pricess_array_items *prices = load_prices("prices.txt");
-        for (int i = 0; i < number_of_files; i++) {
+    for (int i = 0; i < number_of_files; i++) {
         const char *output_file = input_files[i];
+        const char *price_file = input_txt_files[i];
+        printf("\n***** Parking logs %02d *****\n", i + 1);
         struct parking_records_array_items *records_array = load_parking_records(input_files[i]);
+        struct parking_pricess_array_items *prices = load_prices(price_file);
         if (records_array != NULL) {
-            printf("Parking Logs: %s\n", output_file);
             struct parking_records_array_items *current_record = records_array;
             while (current_record != NULL) {
                 int time_in_minutes = calculate_parking_time(current_record);
-                get_parking_fee(time_in_minutes, prices);
+                get_parking_fee(time_in_minutes, prices, i + 1);
                 current_record = current_record->next_array_records;
             }
             printf("\n");
@@ -472,5 +630,9 @@ int main() {
     }
     float average_parking_fee = calculate_average_parking_fee(records_array, prices);
     float average_parking_time = calculate_average_parking_time(records_array);
+    float average_stays = calculate_average_stays(records_array);
+    int most_common_region = get_most_common_region(records_array, input_files);
+    int busiest_hour = get_busiest_hour(records_array);
+    int max_number_of_cars = get_max_number_of_cars(records_array, input_files);
     return 0;
 }
