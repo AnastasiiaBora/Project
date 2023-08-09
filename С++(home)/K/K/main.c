@@ -27,10 +27,22 @@ int main() {
         dx = 0;
         scanf("%d %d", &dy, &dx);
 
-        while((dy != -1 && dx != 0) && (dy != 1 && dx != 0) && (dy != 0 && dx != 1) && (dy != 0 && dx != -1)){
-            printf("Please select two digits");
-            scanf("%d %d", &dy, &dx);
-        }
+        if((dy != -1 && dx != 0) && (dy != 1 && dx != 0) && (dy != 0 && dx != 1) && (dy != 0 && dx != -1)){
+            printf("Please select two digits from the list\n");
+            continue;
+        } else if(dy == -1 && dx != 0) {
+            printf("Please select two digits from the list\n");
+            continue;
+        } else if(dy == 1 && dx != 0) {
+             printf("Please select two digits from the list\n");
+             continue;
+        } else if(dy != 0 && dx == 1) {
+            printf("Please select two digits from the list\n");
+            continue;
+        } else if(dy != 0 && dx != -1) {
+             printf("Please select two digits from the list\n");
+             continue;
+        } 
         
         update(&game, dy, dx);
 
