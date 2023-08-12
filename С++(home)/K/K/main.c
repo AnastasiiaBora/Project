@@ -39,7 +39,7 @@ int main() {
         } else if(dy != 0 && dx == 1) {
             printf("Please select two digits from the list\n");
             continue;
-        } else if(dy != 0 && dx != -1) {
+        } else if(dy != 0 && dx == -1) {
              printf("Please select two digits from the list\n");
              continue;
         } 
