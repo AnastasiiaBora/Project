@@ -68,7 +68,8 @@ for allKeys in dictionary:
     print(allKeys, end = ":")
     print(dictionary[allKeys])
 merge_dictionaries()
-list_of_numbers = [2, 0, 6, 0, 4, 7]
+list_of_numbers = [2, 0, 6, 11]
+# не работает list_of_numbers = [int(x) for x in list_of_numbers]
 print(maximum_product_of_two_numbers(list_of_numbers))
 print(move_zeros_to_the_end(list_of_numbers))
 print(check_for_duplicates(list_of_numbers))
