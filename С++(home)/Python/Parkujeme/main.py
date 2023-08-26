@@ -44,6 +44,9 @@ def load_prices(file_path):
 
     return dict
 
+def calculate_parking_time(start_h, start_m, end_h, end_m):
+    time_in_minutes = (60 - start_m) + (((end_h - start_h) - 1) * 60) + end_m
+    return time_in_minutes
 
 print(load_parking_records("samples\parking_logs_01.csv"))   
 price = load_prices("samples\prices_01.txt")
@@ -51,3 +54,6 @@ price = load_prices("samples\prices_01.txt")
 for parking_time, price in price.items():
     print(parking_time, end = ": ")
     print(price)
+
+
+print(calculate_parking_time(7, 45, 11, 23))
