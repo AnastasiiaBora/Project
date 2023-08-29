@@ -44,9 +44,22 @@ def load_prices(file_path):
 
     return dict
 
+
 def calculate_parking_time(start_h, start_m, end_h, end_m):
     time_in_minutes = (60 - start_m) + (((end_h - start_h) - 1) * 60) + end_m
     return time_in_minutes
+
+def get_parking_fee(time_in_minutes, prices):
+    if(time_in_minutes < 15):
+        result_prise = 0
+    elif(time_in_minutes >= 15 and time_in_minutes < 30):
+        result_prise = price["30m"]
+    elif(time_in_minutes >= 30 and time_in_minutes < 60):
+        result_prise = price["1h"]
+    elif(time_in_minutes >= 60 and time_in_minutes < 180):
+        hours_for_payment = time_in_minutes / 60
+        if(time_in_minutes % 60 == 0):
+            result_prise = price["h+"] * hours_for_payment + price["1h"]
 
 print(load_parking_records("samples\parking_logs_01.csv"))   
 price = load_prices("samples\prices_01.txt")
