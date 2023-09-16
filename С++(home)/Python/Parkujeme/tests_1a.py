@@ -130,36 +130,36 @@ from assignment1 import *
 #     return points
 
 
-def test_calculate_parking_time():
-    print("Testing calculate_parking_time()...")
-    with open("test_files/parking_times.pkl", 'rb') as infile:
-        correct = pickle.load(infile)
+# def test_calculate_parking_time():
+#     print("Testing calculate_parking_time()...")
+#     with open("test_files/parking_times.pkl", 'rb') as infile:
+#         correct = pickle.load(infile)
 
-    passed = 0
-    st_results = list()
-    for start_h, start_m, end_h, end_m, corr_res in correct:
-        try:
-            gets_point = True
-            st_res = calculate_parking_time(start_h, start_m, end_h, end_m)
-            st_results.append(st_res)
+#     passed = 0
+#     st_results = list()
+#     for start_h, start_m, end_h, end_m, corr_res in correct:
+#         try:
+#             gets_point = True
+#             st_res = calculate_parking_time(start_h, start_m, end_h, end_m)
+#             st_results.append(st_res)
 
-            if not isinstance(st_res, int):
-                print("\tIncorrect return type. Expected int, got", type(st_res))
-                gets_point = False
-            elif st_res != corr_res:
-                print("\tIncorrect return value for {}:{:02d}-{}:{:02d}. Expected {}, got {}".format(
-                    start_h, start_m, end_h, end_m, corr_res, st_res))
-                gets_point = False
-        except Exception:
-            gets_point = False
+#             if not isinstance(st_res, int):
+#                 print("\tIncorrect return type. Expected int, got", type(st_res))
+#                 gets_point = False
+#             elif st_res != corr_res:
+#                 print("\tIncorrect return value for {}:{:02d}-{}:{:02d}. Expected {}, got {}".format(
+#                     start_h, start_m, end_h, end_m, corr_res, st_res))
+#                 gets_point = False
+#         except Exception:
+#             gets_point = False
 
-        passed += gets_point
+#         passed += gets_point
 
-    points = (passed / len(correct)) * 0.5
-    if len(set(st_results)) == 1:
-        points = 0
-    print("Testing calculate_parking_time() finished: {:.2f}/0.5 points".format(points))
-    return points
+#     points = (passed / len(correct)) * 0.5
+#     if len(set(st_results)) == 1:
+#         points = 0
+#     print("Testing calculate_parking_time() finished: {:.2f}/0.5 points".format(points))
+#     return points
 
 
 # def test_get_parking_fee():
@@ -354,60 +354,60 @@ def test_calculate_parking_time():
 #     return points
 
 
-# def test_get_max_number_of_cars():
-#     print("Testing get_max_number_of_cars()...")
-#     with open("test_files/max_numbers.pkl", 'rb') as infile:
-#         correct = pickle.load(infile)
+def test_get_max_number_of_cars():
+    print("Testing get_max_number_of_cars()...")
+    with open("test_files/max_numbers.pkl", 'rb') as infile:
+        correct = pickle.load(infile)
 
-#     passed = 0
-#     st_results = list()
-#     for i, (records, corr_res, corr_lst) in enumerate(correct, start=1):
-#         try:
-#             gets_point = True
-#             st_res = get_max_number_of_cars(records)
-#             st_results.append(st_res[0])
+    passed = 0
+    st_results = list()
+    for i, (records, corr_res, corr_lst) in enumerate(correct, start=1):
+        try:
+            gets_point = True
+            st_res = get_max_number_of_cars(records)
+            st_results.append(st_res[0])
 
-#             if not isinstance(st_res, tuple):
-#                 print("\tIncorrect return type. Expected multiple values, got", st_res)
-#                 gets_point = False
-#             elif len(st_res) != 2:
-#                 print("\tIncorrect return type. Expected two values, got", len(st_res))
-#                 gets_point = False
-#             elif not isinstance(st_res[0], int):
-#                 print("\tIncorrect return type. First value should be int, got", type(st_res[0]))
-#                 gets_point = False
-#             elif not isinstance(st_res[1], list):
-#                 print("\tIncorrect return type. Second value should be list, got", type(st_res[1]))
-#                 gets_point = False
-#             else:
-#                 st_max, st_lst = st_res
-#                 if st_max != corr_res:
-#                     print("\tIncorrect return value for test {}. Expected {}, got {}".format(
-#                         i, corr_res, st_max))
-#                     gets_point = False
-#                 if len(st_lst) != len(corr_lst):
-#                     print("\tIncorrect return value for test {}. Expected list of {} values, got {}".format(
-#                         i, len(corr_lst), len(st_lst)))
-#                     gets_point = False
-#                 else:
-#                     for check_idx in range(len(corr_lst)):
-#                         if st_lst[check_idx] != corr_lst[check_idx]:
-#                             print("Incorrectly calculated car numbers at timestep {} (test {}). Expected {}, got {}".format(
-#                                 check_idx, i, corr_lst[check_idx], st_lst[check_idx]))
-#                             gets_point = False
-#                 if max(st_lst) != st_max:
-#                     print("\tIncorrect return value for test {}. Does not return maximum value from list".format(i))
-#                     gets_point = False
-#         except Exception:
-#             gets_point = False
+            if not isinstance(st_res, tuple):
+                print("\tIncorrect return type. Expected multiple values, got", st_res)
+                gets_point = False
+            elif len(st_res) != 2:
+                print("\tIncorrect return type. Expected two values, got", len(st_res))
+                gets_point = False
+            elif not isinstance(st_res[0], int):
+                print("\tIncorrect return type. First value should be int, got", type(st_res[0]))
+                gets_point = False
+            elif not isinstance(st_res[1], list):
+                print("\tIncorrect return type. Second value should be list, got", type(st_res[1]))
+                gets_point = False
+            else:
+                st_max, st_lst = st_res
+                if st_max != corr_res:
+                    print("\tIncorrect return value for test {}. Expected {}, got {}".format(
+                        i, corr_res, st_max))
+                    gets_point = False
+                if len(st_lst) != len(corr_lst):
+                    print("\tIncorrect return value for test {}. Expected list of {} values, got {}".format(
+                        i, len(corr_lst), len(st_lst)))
+                    gets_point = False
+                else:
+                    for check_idx in range(len(corr_lst)):
+                        if st_lst[check_idx] != corr_lst[check_idx]:
+                            print("Incorrectly calculated car numbers at timestep {} (test {}). Expected {}, got {}".format(
+                                check_idx, i, corr_lst[check_idx], st_lst[check_idx]))
+                            gets_point = False
+                if max(st_lst) != st_max:
+                    print("\tIncorrect return value for test {}. Does not return maximum value from list".format(i))
+                    gets_point = False
+        except Exception:
+            gets_point = False
 
-#         passed += gets_point
+        passed += gets_point
 
-#     points = (passed / len(correct)) * 2.0
-#     if len(set(st_results)) == 1:
-#         points = 0
-#     print("Testing get_max_number_of_cars finished: {:.2f}/2.0 points".format(points))
-#     return points
+    points = (passed / len(correct)) * 2.0
+    if len(set(st_results)) == 1:
+        points = 0
+    print("Testing get_max_number_of_cars finished: {:.2f}/2.0 points".format(points))
+    return points
 
 
 # def test_optimize_hourly_fee():
@@ -450,8 +450,8 @@ def main():
     # points.append(test_load_prices())
     # print()
 
-    points.append(test_calculate_parking_time())
-    print()
+    # points.append(test_calculate_parking_time())
+    # print()
 
     # points.append(test_get_parking_fee())
     # print()
@@ -471,8 +471,8 @@ def main():
     # points.append(test_get_busiest_hour())
     # print()
 
-    # points.append(test_get_max_number_of_cars())
-    # print()
+    points.append(test_get_max_number_of_cars())
+    print()
 
     # points.append(test_optimize_hourly_fee())
     # print()
