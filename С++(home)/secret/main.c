@@ -12,7 +12,7 @@ char* playfair_encrypt(char* key, char* text){
     char key_without_duplicates[225] = "";
     char alphabet_without_duplicates[225] = "";
 
-// working with key
+
 for (int i = 0; i < (int)strlen(key); i++) {
     if ((int)key[i] >= 97 && (int)key[i] <= 122) {
         key[i] = key[i] - 32;
@@ -34,9 +34,7 @@ for(int i = 0; i < strlen(key); i++){
         strncat(key_without_duplicates, &key[i], 1);
     }
 }
-// working with key
 
-// working with alphabet
 for(int j = 0; j <= strlen(ALPHA); j++) {
         int flag = 0;
     for(int i = 0; i < strlen(key_without_duplicates); i++) {
@@ -49,9 +47,7 @@ for(int j = 0; j <= strlen(ALPHA); j++) {
         strncat(alphabet_without_duplicates, &ALPHA[j], 1);
     }
 }
-// working with alphabet
 
-// working with text
 int index_letter = 0;
 for (int i = 0; i < (int)strlen(text); i++) {
     if(text[i] == ' '){
@@ -87,9 +83,7 @@ for (int i = 0; i < (int)strlen(text); i++) {
 if(strlen(text) % 2 == 1){
     strcat(text, "X");
 }
-// working with text
 
-// to create an array
     int len = strlen(key_without_duplicates);
  
 for(int i = 0; i < 5; i++){
@@ -105,9 +99,6 @@ for(int i = 0; i < 5; i++){
     }
     printf("\n");
 }
-// to create an array
-
-// working with a cipher
 char cipher_letter[a][b];
 
 for(int i = 0; i < 5; i++) {
@@ -162,7 +153,6 @@ for(int j = 0; j < (int)strlen(text); j = j + 2) {
             }
 printf("%c%c", cipher_letter[cipher_str1][cipher_column1], cipher_letter[cipher_str2][cipher_column2]);
 }
-// working with a cipher
 }
  
 int main(){
