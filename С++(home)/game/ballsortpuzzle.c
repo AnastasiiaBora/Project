@@ -1,19 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h> 
 #include <time.h>
-#include <stdbool.h>
+#include <curses.h>
 #include "ballsortpuzzle.h"
 
 void generator(const int rows, const int columns, char field[rows][columns]) {
     srand(time(NULL));
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < columns; j++) {
-            char randomletter;
-            randomletter = "@*^+"[rand () % 4];
-            field[i][j] = randomletter;           
-        }
-    }
 
     int randomnumber1 = rand() % columns;
     int randomnumber2 = rand() % columns;
@@ -68,4 +60,8 @@ bool check(const int rows, const int columns, char field[rows][columns]) {
 
 void game_field(const int rows, const int columns, char field[rows][columns]){
     
+}
+
+void ball_sort_puzzle() {
+
 }

@@ -1,3 +1,5 @@
+from datetime import datetime
+from calendar import monthrange
 class Movie:
     def __init__(self, title, length, genre, age_limit, release_date):
         self.title = title
@@ -65,10 +67,15 @@ class Movie:
                 raise ValueError('Invalid day for February: "{date}"')
 
     def get_time_passed(self, date):
-        from datetime import datetime
-        current_datetime = datetime.now()
-        
-        return 0
+        today = datetime.now()
+        current_time = today.year * 366 + monthrange(today.year, today.month)[1] + today.day
+        date_prem = date.split('/')
+        premiere_date = int(date_prem[0]) * 366 + monthrange(int(date_prem[0]), int(date_prem[1]))[1] + int(date_prem[2])
+
+        number_of_days = current_time - premiere_date
+
+        print(number_of_days)
+        return number_of_days
 
 
 if __name__ == '__main__':
